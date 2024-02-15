@@ -1,0 +1,89 @@
+doctype html
+html
+  head
+    title="Occasional Transport - Ottawa's LRT Status, Alerts and Cancellations"
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name="description" content="The status of OC Transpo's Ottawa LRT. Is the Ottawa LRT running today? Is it down? It takes a village to push this train")
+    meta(name="author" content="Justin Kelly - Citizen IG")
+    script(src="/js/bootstrap.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/ScrollTrigger.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/chart.js@2.9.1/dist/Chart.min.js")
+    script(src="https://use.fontawesome.com/releases/v5.15.3/js/all.js" crossorigin="anonymous")
+    link(href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css")
+    link(href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css")
+    link(rel="stylesheet" type="text/css" href="../css/style.css")
+
+    style.
+      @import url('https://fonts.googleapis.com/css?family=Lato:400,700|Montserrat:900');
+
+      $font: 'Lato', sans-serif;
+      $big: 'Montserrat', sans-serif;
+
+      $red: #EF2F3C;
+      $white: #F6F4F3;
+      $blue: #276FBF;
+      $dark: #183059;
+      $yellow: #F0A202;
+
+      .container4 {
+        
+      }
+
+      h1.me {
+        font-family: 'Lato', sans-serif;;
+        text-align: center;
+        margin-top: 0.7em;
+        font-size: 1.5em;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        color: #F6F4F3;
+      }
+
+      #timer {
+        color: #F6F4F3;
+        text-align: center;
+        text-transform: uppercase;
+        font-family: 'Lato', sans-serif;;
+        font-size: .7em;
+        letter-spacing: 5px;
+      }
+
+      .days, .hours, .minutes, .seconds {
+        display: inline-block;
+        padding: 8px;
+        width: 10em;
+        border-radius: 5px;
+      }
+
+      .days {
+        background: #c2585c;
+      }
+
+      .hours {
+        background: #F6F4F3;
+        color: #183059;
+      }
+
+      .minutes {
+        background: #505e72;
+      }
+
+      .seconds {
+        background: #f3cd8a;
+        color: #183059;
+      }
+
+      .numbers {
+        font-family: 'Montserrat', sans-serif;
+        color: #183059;
+        font-size: 4em;
+      }  
+
+  body(id="page-top")
+
+    block content 
+
+    block footer
+
+  block scripts

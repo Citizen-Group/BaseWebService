@@ -1,0 +1,40 @@
+extends head
+
+block content
+
+block footer
+  footer.footer.text-center
+    .container
+      .row
+        <!-- Footer Location -->
+        .col-lg-4.mb-5.mb-lg-0
+          h4.text-uppercase.mb-4 Contact us
+          p.lead.mb-0 control.ottawa
+            i.fas.fa-at 
+            | gmail.com
+
+        <!-- Footer Social Icons -->
+        .col-lg-4.mb-5.mb-lg-0
+          h4.text-uppercase.mb-4 Around the Web
+          a.btn.btn-outline-light.btn-social.mx-1(href="https://twitter.com/Pot_Snap")
+            i.fab.fa-twitter
+          
+          a.btn.btn-outline-light.btn-social.mx-1(href="https://www.reddit.com/r/ottawa/")
+            i.fab.fa-reddit-alien
+
+        <!-- Footer About Text -->
+        .col-lg-4
+          <h4 class="text-uppercase mb-4">PotSnap.ca</h4>
+          <p class="lead mb-0">An informative and satirical website built to increase ease of reporting and visualizing Ottawa's Pothole pandemic</p>
+
+  <!-- Copyright Section -->
+  section.copyright.py-4.text-center.text-white
+    .container
+      small Made in Bayshore with ❤ by Citizen Information Group 2022</small>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    .scroll-to-top.d-lg-none.position-fixed
+      a.js-scroll-trigger.d-block.text-center.text-white.rounded(href="#page-top")
+        i.fa.fa-chevron-up
+
+block scripts

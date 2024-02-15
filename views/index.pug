@@ -1,0 +1,470 @@
+extends layout
+
+block content
+
+  style.
+    $globe-width:   12px;
+    $globe-height:  28px;
+    $globe-spacing: 40px;
+    $globe-spread: 3px;
+    $light-off-opacity: 0.4;
+
+    body {
+      background: #000;
+    }
+    .lightrope {
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      position: absolute;
+      z-index: 1;
+      margin: -15px 0 0 0;
+      padding: 0;
+      pointer-events: none;
+      width: 100%;
+      li {
+        position: relative;
+        animation-fill-mode: both; 
+        animation-iteration-count:infinite;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: block;
+        width: $globe-width;
+        height: $globe-height;
+        border-radius: 50%;
+        margin: $globe-spacing/2;
+        display: inline-block;
+        background: rgba(0,247,165,1);
+        box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,247,165,1);
+        animation-name: flash-1;
+        animation-duration: 2s;
+        &:nth-child(2n+1) {
+          background: rgba(0,255,255,1);
+          box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,255,255,0.5);
+          animation-name: flash-2;
+          animation-duration: 0.4s;
+        }
+        &:nth-child(4n+2) {
+          background: rgba(247,0,148,1);
+          box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(247,0,148,1);
+          animation-name: flash-3;
+          animation-duration: 1.1s;
+        }
+        &:nth-child(odd) {
+          animation-duration: 1.8s;
+        }
+        &:nth-child(3n+1) {
+          animation-duration: 1.4s;
+        }
+        &:before {
+          content: "";
+          position: absolute;
+          background: #222;
+          width: ($globe-width - 2);
+          height: $globe-height/3;
+          border-radius: 3px;
+          top: (0 - ($globe-height/6));
+          left: 1px;
+        }
+        &:after {
+          content: "";
+          top: (0 - $globe-height/2);
+          left: $globe-width - 3;
+          position: absolute;
+          width: $globe-spacing + 12;
+          height: ($globe-height/3 * 2);
+          border-bottom: solid #222 2px;
+          border-radius: 50%;
+        }
+        &:last-child:after {
+          content: none;
+        }
+        &:first-child {
+          margin-left: -$globe-spacing;
+        }
+      }
+    }
+    @keyframes flash-1 { 
+        0%, 100% { background: rgba(0,247,165,1);
+        box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,247,165,1);} 
+        50% { background: rgba(0,247,165,$light-off-opacity);
+        box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,247,165,0.2);}
+    }
+    @keyframes flash-2 { 
+        0%, 100% { background: rgba(0,255,255,1);
+        box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,255,255,1);} 
+        50% { background: rgba(0,255,255,$light-off-opacity);
+        box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(0,255,255,0.2);}
+    }
+    @keyframes flash-3 { 
+        0%, 100% { background: rgba(247,0,148,1);
+        box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(247,0,148,1);} 
+        50% { background: rgba(247,0,148,$light-off-opacity);
+        box-shadow: 0px $globe-height/6 $globe-width*2 $globe-spread rgba(247,0,148,0.2);}
+    }
+
+
+  <!-- Navigation -->
+  nav.navbar.navbar-expand-lg.bg-secondary.text-uppercase.fixed-top(id="mainNav")
+    .container
+      a.navbar-brand(href="#page-top") Ottawa LRT Status
+      
+      <!-- Hamburger for small res -->
+      button.navbar-toggler.text-uppercase.font-weight-bold.bg-primary.text-white.rounded(type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation")
+        i.fas.fa-bars
+      
+      <!-- Navigation Elements. Generates LG and SM -->
+      .collapse.navbar-collapse(id="navbarResponsive")
+        ul.navbar-nav.ms-auto
+          li.nav-item.mx-0.mx-lg-1
+            a.nav-link.py-3.px-0.px-lg-3.rounded
+              span(id="hoursAgo") 00
+              span  H since last incident
+          li.nav-item.mx-0.mx-lg-1
+            a.nav-link.py-3.px-0.px-lg-3.rounded(href="/live") Live
+          li.nav-item.mx-0.mx-lg-1
+            a.nav-link.py-3.px-0.px-lg-3.rounded(href="#Latest") Latest
+          li.nav-item.mx-0.mx-lg-1
+            a.nav-link.py-3.px-0.px-lg-3.rounded(href="#Report") Report          
+          li.nav-item.mx-0.mx-lg-1
+            a.nav-link.py-3.px-0.px-lg-3.rounded(href="#Station") Stations          
+          li.nav-item.mx-0.mx-lg-1
+            a.nav-link.py-3.px-0.px-lg-3.rounded(href="#News") News          
+          li.nav-item.mx-0.mx-lg-1
+            a.nav-link.py-3.px-0.px-lg-3.rounded(href="#Statistics") Statistics
+
+  <!-- Masthead -->
+  - var css = "masthead text-white text-center bg-primary"
+  - var text1 = ""
+  - var text2 = ""
+  - var img = ""
+
+  if currentStatus.overallStatus == "success"
+    - css = "masthead text-white text-center bg-primary"
+    - text1 = "The LRT is running*"
+    - text2 = "We report fast. The Mayor reports furious."
+    - img = "success"
+
+  else if currentStatus.overallStatus == "warning"
+    - css = "masthead text-white text-center bg-warning"
+    - text1 = "The LRT is struggling with life right now"
+    - text2 = undefined
+    - img = "warning"
+    
+  else if currentStatus.overallStatus == "danger"
+    - css = "masthead text-white text-center bg-danger"
+    - text1 = "The Hot Mess Express Rides Again!"
+    - text2 = undefined
+    - img = "danger"
+
+  else
+    - css = "masthead text-white text-center bg-info"
+    - text1 = "The LRT is running fine???"
+    - text2 = "We are having trouble figuring out whats going right now \n Check back shortly"
+    - img = "info"
+
+  header(class=css)
+    .container  
+      .row
+        .col     
+          <!-- Image -->
+          img.masthead-avatar.mb-5(src="img/hotmessexpress_" + img + ".png" alt="The Hot Mess Express")
+
+      .row
+        .col
+          h1.masthead-heading.text-uppercase.mb-0 #{text1}
+          small.masthead-subheading.mb-3 #{text2}
+
+      .row
+        .col
+          p.masthead-subheading.my-3 
+            if events[0].timestamp 
+              | Last incident was #{events[0].timestamp} ago. 
+            if events[0].reason.short
+              | Reason: #{events[0].reason.short} 
+        
+      <!-- Scroll down to latest -->
+      .row
+        .col
+          a.btn.btn-outline-light.btn-social.mt-3.js-scroll-trigger(href="#Latest")
+            i.fa.fa-chevron-down
+
+  <!-- Latest Status Section -->
+  section.page-section(id="Latest")
+    .container
+      .row
+        .col
+          <!-- Active Events Section Heading -->
+          h2.page-section-heading.text-center.text-uppercase.text-secondary.mb-5 Last 5 Reports
+
+          <!-- Icon Divider -->
+          .divider-custom
+            .divider-custom-line
+            .divider-custom-icon
+              i.fas.fa-train 
+            .divider-custom-line
+
+      .row
+        .col
+          .accordion.text-center(id="events")
+            each val, index1 in events
+              .card
+                .card-header(id="heading"+index)                      
+                  .row                    
+                    .col-2
+                      span.btn-social.mt-1 #{val.timestamp}
+                    .col-10
+                      .row(style="padding-left: 12px")
+                        .col
+
+                      .row
+                        .col
+                          button.btn.btn-outline-light.active(type="button" data-bs-toggle="collapse" data-bs-target="#collapse"+index1 aria-expanded="true" aria-controls="collapseOne" style="width:100%")
+                            .text-uppercase.text-secondary.p-2(style="white-space: normal") #{val.reason.short}
+                            i.fas.fa-chevron-down.text-muted.small
+
+                .collapse(id="collapse"+index1 aria-labelledby="heading"+index1 data-bs-parent="#events")
+                  .card-body
+                    .row                    
+                      .col-md-2.mb-3
+                        .row
+                          .col-md-12
+                            p.small Report an update                            
+                        .row
+                          .col-md-12                     
+                            a.btn.btn-sm.btn-light.mb-1(style="width:100%" href="https://www.reddit.com/message/compose/?to=JKOttawa&subject=Reporting%20LRT%20Status&message=Location:%0ATime:%0AReason:%0A")
+                              i.fab.fa-reddit-alien 
+                              |  Reddit
+                          .col                     
+                            a.btn.btn-sm.btn-light(style="width:100%" href="mailto:control.ottawa@gmail.com?subject=Reporting LRT Status&body=Time:%0ALocation:%0AReason:%0A%0A")
+                              i.far.fa-envelope 
+                              |  Email                                  
+                      .col-md-10
+                        .row
+                          .col            
+                            p.small Reported Location: #{val.location.text}
+                            h4.text-uppercase.text-secondary #{val.reason.long}
+                            p.text-uppercase.text-secondary #{val.subtext}
+
+  <!-- Report Section -->
+  section.page-section(id="Report")
+    .container
+      .row
+        .col
+          <!-- Contact Section Heading -->
+          h2.page-section-heading.text-center.text-uppercase.text-secondary.mb-0 Report an incident
+
+          <!-- Icon Divider -->
+          .divider-custom
+            .divider-custom-line
+            .divider-custom-icon
+              i.fas.fa-exclamation 
+            .divider-custom-line
+
+          p.text-center.lead Send us a status report
+          p.text-center.small.text-muted We can't handle buses just quite yet, so don't report them please.
+
+          .row
+            .col-3
+            .col-6
+              .row
+                .col
+                  .text-center.mt-2
+                    a.btn.btn-outline-dark(href="https://www.reddit.com/message/compose/?to=JKOttawa&subject=Reporting%20LRT%20Status&message=Location:%0ATime:%0AReason:%0A")
+                      i.fab.fa-reddit-alien 
+                      |   Reddit
+
+                .col
+                  .text-center.mt-2
+                    a.btn.btn-outline-dark(href="mailto:control.ottawa@gmail.com?subject=Reporting LRT Status&body=Time:%0ALocation:%0AReason:%0A%0A")
+                      i.far.fa-envelope 
+                      |   Email
+
+                .col
+                  .text-center.mt-2
+                    a.btn.btn-outline-dark(href="/report")
+                      i.fas.fa-kiwi-bird
+                      |   *NEW* Reporting Page
+                .col
+                  .text-center.mt-2
+                    a.twitter-share-button(
+                      href="https://twitter.com/intent/tweet"
+                      data-size="large"
+                      data-text="Reporting LRT Status\nTime:\nLocation:\nReason:\n\n"
+                      data-url="http://OccasionalTransport.ca/"
+                      data-hashtags="OttawaLRT,OccasionalReport"
+                      data-via="OccTranspo") Tweet
+            .col-3
+  
+  <!-- Latest Section -->
+  section.page-section.bg-primary.text-white.mb-0(id="Station")
+    .container
+
+      <!-- About Section Heading -->
+      h2.page-section-heading.text-center.text-uppercase.text-white Latest Station Statuses
+
+      <!-- Icon Divider -->
+      .divider-custom.divider-light
+        .divider-custom-line
+        .divider-custom-icon
+          i.fas.fa-star
+        .divider-custom-line
+
+  section.page-section(id="News")
+    .container
+      .row
+        .col-md-6
+          h2.page-section-heading.text-center.text-uppercase.text-secondary.mb-5 News
+          ul
+            li  Transit Commissioner barred from seeing RTG 'Back on Track' plan. RTG cites, "invisible plans are for imagination of council only"
+            li  Ottawa AG to investigate City Hall corruption. Sudden rise in vacation requests.
+            li  TSB releases findings of train problems with single page image of City Hall, RTG and a bag of cash
+            li  City Hall to replace aging electric heating system with new eco friendly 15M cash-burn law suit
+            li  RTM gets new management, citing "previous manager was promoted out due to excellence" 
+            li  OC vowed "change is coming"; Public regrets giving opportunity
+            li  TSB to open office in City Hall, citing "The time and cost savings over the next 30 years are going to be astronomical"
+            li  Outgoing OC manager seen smiling for the first time in decades; hair regrowth and dancing
+            li  Cat hijacks municipal bus; riders unaware for hours, applaud good timing at stops and courteous meows
+            li  New FLIRT train arrives in Ottawa; local train jealous of strong axels and promises of reliability
+
+        .col-md-6
+          h2.page-section-heading.text-center.text-uppercase.text-secondary.mb-5 Latest transit reviews
+          p 
+            i.fas.fa-star
+          p "Holy crap... I mean, how, why..."<br> - <i>TSB Blen Lilon</i></p>
+          p.small.text-muted
+            a(href="https://www.reddit.com/message/compose/?to=JKOttawa&subject=LRT") Submit a review
+
+  <!-- Stats Section -->
+  section.page-section.portfolio(id="Statistics")
+    .container 
+
+      <!-- Stats Section Heading -->
+      h2.page-section-heading.text-center.text-uppercase.text-secondary.mb-0 Statistics
+
+      <!-- Icon Divider -->
+      .divider-custom
+        .divider-custom-line
+        .divider-custom-icon
+          i.fas.fa-train
+        .divider-custom-line
+
+      <!-- Stats Grid Items -->
+      .page-section-heading
+        h3.text-center Rework is in progress 
+          p.small.text-primary (will be on-track with the LRT sometime in 2025)
+
+      .row
+        .col-4  
+        .col-4
+            canvas(id="myChart" width="400" height="400")
+            script.
+              var ctx = document.getElementById('myChart').getContext('2d');
+              var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['TP', 'BV', 'PIM', 'LYN', 'PAR', 'RDU', 'uOT', 'LEE', 'HUR', 'TMB', 'STL', 'CYR', 'BLR'],
+                    datasets: [{
+                        label: '# of Incidents',
+                        data: [3, 1, 4, 1, 2, 1, 3, 2, 1, 0, 2, 0, 6],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+              });
+        .col-4
+
+block scripts
+  script.
+    function x() {
+
+      // Params
+      var od = #{currentStatus.lastFailureClockTime};
+
+      var nd = new Date();
+      var nt = nd.getTime();
+
+      var optionsd = { weekday: 'long', month: 'long', day: 'numeric'};
+      var optionst = { timeStyle: 'short', hour12: true };
+
+      // Top Nav Bar hours
+      document.getElementById('hoursAgo').innerHTML = hAgo(od)   
+      //document.getElementById('hoursAgoText').innerHTML = hAgo(od)   
+
+    } x();
+
+    function msAgo(timestampMs) {
+      var nd = new Date();
+      var nt = nd.getTime();
+      return nt-timestampMs;
+    }
+
+    function mAgo(timestampMs) {
+      var minutes = 1000 * 60;      
+      let minutesAgo = msAgo(timestampMs)/minutes;
+      return minutesAgo.toFixed(2)
+
+    }
+
+    function hAgo(timestampMs) {
+      let hoursAgo = mAgo(timestampMs)/60;
+      return hoursAgo.toFixed(1)
+    }
+
+    window.twttr = (function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0],
+        t = window.twttr || {};
+      if (d.getElementById(id)) return t;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://platform.twitter.com/widgets.js";
+      fjs.parentNode.insertBefore(js, fjs);
+
+      t._e = [];
+      t.ready = function(f) {
+        t._e.push(f);
+      };
+
+      return t;
+    }(document, "script", "twitter-wjs"));
+  
+

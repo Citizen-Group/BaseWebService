@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  <!-- Navigation -->
+  nav.navbar.navbar-expand-lg.bg-secondary.text-uppercase.fixed-top(id="mainNav")
+    .container
+      a.navbar-brand(href="/") Ottawa LRT Status
+      
+  header(class="masthead bg-primary")
+    .container     
+      .row
+        .col
+          button.btn.btn-light.p-3
+            h1= (error.status||("(╯°□°）╯︵ ┻━┻ ")) + " Oops..."
+
+      .row.mt-3.text-white
+        .col
+          h4= message
+          i.fas.fa-chevron-circle-right
+          if referral
+            a.link-light.ps-2(href=`${referral.url}`) Go back to #{referral.text}
+          else 
+            a.link-light.ps-2(href="/") Go back to home
+
+      .row.mt-3.text-white 
+          if error.stack
+            b Developer Stack Trace:
+            small 
+              pre #{error.stack}
